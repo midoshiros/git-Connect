@@ -6,31 +6,26 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct MainScreen: View {
+    @State private var authViewModel = AuthVm()
     
-    @State var vm = MainScreenVM()
     var body: some View {
-        
-        if vm.isSingedIn {
-            TabView{
-                Tab("Home", systemImage: "house"){
-                    Home(userId: vm.userId)
-                }
+        if authViewModel.isSignedIn, !authViewModel.currentUserId.isEmpty {
+            TabView {
+                Home(userId: authViewModel.currentUserId)
+                    .tabItem {
+                        Label("Home", systemImage: "house")
+                    }
                 
-                Tab("Profile", systemImage: "person.circle"){
-                    Profile()
-                }
+                Profile()
+                    .tabItem {
+                        Label("Profile", systemImage: "person.circle")
+                    }
             }
-        }
-        
-        else{
+        } else {
             LogIn()
         }
-        
     }
-}
-
-#Preview {
-    MainScreen()
 }
